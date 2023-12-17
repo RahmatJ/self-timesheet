@@ -36,7 +36,7 @@ func getUri(cf config) string {
 	return fmt.Sprintf("%s://%s:%s@%s/%s", baseUri, cf.userName, cf.password, host, cf.dbName)
 }
 
-func InitClient() (*mongo.Client, error) {
+func InitDatabase() (*mongo.Database, error) {
 	cf := getConfig()
 	uri := getUri(cf)
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
@@ -51,9 +51,7 @@ func InitClient() (*mongo.Client, error) {
 		return nil, err
 	}
 
-	defer func() {
-		log.Info().Msg("Deferring mongo client")
-	}()
+	db := client.Database(cf.dbName)
 
-	return client, nil
+	return db, nil
 }

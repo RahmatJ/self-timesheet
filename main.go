@@ -17,13 +17,13 @@ func main() {
 	port := 3000
 	address := fmt.Sprintf(":%d", port)
 
-	_, err := mongo.InitClient()
+	db, err := mongo.InitDatabase()
 	if err != nil {
 		log.Fatal().Err(err).Msgf("Error occurred: %v", err)
 		return
 	}
 
-	timesheet.NewRoute(app)
+	timesheet.NewRoute(app, db)
 
 	err = app.Listen(address)
 	if err != nil {

@@ -1,6 +1,7 @@
 package timesheet
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
 )
@@ -19,7 +20,7 @@ func (h *handler) createTimesheet(ctx *fiber.Ctx) error {
 	}
 	log.Info().Msgf("Starting create record with payload: %v", *payload)
 	//  TODO(Rahmat): validate body
-	err = h.uc.Create(*payload)
+	err = h.uc.Create(context.TODO(), *payload)
 	if err != nil {
 		log.Error().Msgf("Error when creating record timesheet: %v", err)
 		return err

@@ -1,12 +1,31 @@
 package timesheet
 
-type implementation struct {
+import (
+	"context"
+	"github.com/rs/zerolog/log"
+)
+
+type useCaseImpl struct {
+	repository Repository
 }
 
-func (i implementation) Create(payload CreateTimesheetRequestPayload) error {
+func (u useCaseImpl) Create(c context.Context, payload CreateTimesheetRequestPayload) error {
+
+	recordPayload := CreateTimesheetRecordPayload{
+		Description: payload.Description,
+	}
+
+	err := u.repository.Create(c, recordPayload)
+	if err != nil {
+		log.Error().Msgf("Error when create record. Error: %v", err)
+		return err
+	}
+
 	return nil
 }
 
-func NewUseCaseImpl() UseCase {
-	return &implementation{}
+func NewUseCaseImpl(repository Repository) UseCase {
+	return &useCaseImpl{
+		repository: repository,
+	}
 }
